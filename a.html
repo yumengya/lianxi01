@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    ul,li{
+        list-style-type: none;
+    }
+</style>
+<body>
+<div style="position: relative">
+    姓名:<input  id="username" oninput="addClick()" type="text">
+    <div  id="dropdownmune" style="display:none;box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);position:absolute;top:24px;left:35px;width:174px;background: #fff;height:100px;">
+        <ul id="selectname"></ul>
+    </div>
+</div>
+
+<!--<select name="" id="selectname"></select>-->
+<script>
+    function addClick() {
+        var a=['李雷雷','王小梅','王德江','胡腊梅'];
+        var input = document.getElementById('username').value;
+        var reg = /^(李|王|胡)/g;
+        var inputValue=input.trim();
+        if(inputValue.match(reg)){
+            console.log(input,'44');
+            dropdownmune.style.display='block';
+            var len=a.length;
+            var arr =[];
+            var str='';
+          for(var i=0;i<len;i++){
+                if(a[i].match(inputValue)){
+                    arr.push(a[i])
+                }
+            }
+            var selectname = document.getElementById('selectname');
+            for(var j=0;j<arr.length;j++){
+                str+='<li>'+arr[j]+'</li>'
+            }
+            selectname.innerHTML=str;
+        }else{
+            dropdownmune.style.display='none';
+        }
+    }
+
+</script>
+</body>
+</html>
