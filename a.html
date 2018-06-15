@@ -10,41 +10,69 @@
     }
 </style>
 <body>
-<div style="position: relative">
-    姓名:<input  id="username" oninput="addClick()" type="text">
-    <div  id="dropdownmune" style="display:none;box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);position:absolute;top:24px;left:35px;width:174px;background: #fff;height:100px;">
-        <ul id="selectname"></ul>
+<div  style="position: relative">
+    姓名:<input  id="autocomplete"  type="text">
+        <div id="con" style="display:none;position:absolute;  box-shadow:2px 2px 2px #ddd;;top:24px;left:36px;width:174px;height:100px;">
+
+        </div>
+     <div id="show">
+
     </div>
+
 </div>
-
-<!--<select name="" id="selectname"></select>-->
-<script>
-    function addClick() {
-        var a=['李雷雷','王小梅','王德江','胡腊梅'];
-        var input = document.getElementById('username').value;
-        var reg = /^(李|王|胡)/g;
-        var inputValue=input.trim();
-        if(inputValue.match(reg)){
-            console.log(input,'44');
-            dropdownmune.style.display='block';
-            var len=a.length;
-            var arr =[];
-            var str='';
-          for(var i=0;i<len;i++){
-                if(a[i].match(inputValue)){
-                    arr.push(a[i])
+    </Body>
+    <script>
+        var srcArr = new Array();
+        srcArr.push('hello');
+        srcArr.push('hi');
+        srcArr.push('tencent');
+        srcArr.push('tabao');
+        srcArr.push('tenda');
+        var my = document.getElementById("autocomplete");
+        var con = document.getElementById('con');
+        var show = document.getElementById('show');
+        var cache = new Stack();
+        /*形成一个数组*/
+        my.oninput=function(e) {
+            // deal input
+            if(e.inputType === 'insertText') {
+                cache.push(e.data);
+            } else if (e.inputType === 'deleteContentBackward') {
+                cache.pop();
+                con.style.display='none';
+            }
+            con.removeChild(con.firstChild);
+            con.appendChild(document.createElement('ul'));
+          /*  show.innerHTML = cache.toString();*/
+            if(cache.len() < 1) return;
+        srcArr.forEach(function(val, index, arr) {
+                var tmp = val.substring(0, cache.len());
+                if(tmp === cache.toString()) {
+                    con.style.display='block';
+                    var ele = document.createElement('li');
+                    ele.textContent = srcArr[index];
+                    con.firstChild.appendChild(ele);
                 }
-            }
-            var selectname = document.getElementById('selectname');
-            for(var j=0;j<arr.length;j++){
-                str+='<li>'+arr[j]+'</li>'
-            }
-            selectname.innerHTML=str;
-        }else{
-            dropdownmune.style.display='none';
+            });
+        };
+        function Stack() {
+            this.data = new Array();
         }
-    }
-
-</script>
-</body>
+        Stack.prototype.push = function(src) {
+            this.data.push(src);
+        };
+        Stack.prototype.toString = function() {
+            var tmpStr = '';
+            this.data.forEach(function(val) {
+                tmpStr = tmpStr + val;
+            });
+            return tmpStr;
+        };
+        Stack.prototype.pop = function() {
+            this.data.splice(this.data.length - 1);
+        };
+        Stack.prototype.len = function() {
+            return this.data.length;
+        };
+    </script>
 </html>
